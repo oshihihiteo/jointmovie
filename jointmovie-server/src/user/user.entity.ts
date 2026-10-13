@@ -5,7 +5,7 @@ export class User {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({unique: true})
   username!: string;
 
   @Column()
@@ -14,6 +14,6 @@ export class User {
   @Column()
   displayname!: string;
   
-  @Column()
+  @Column({default: null, nullable: true})
   avatar!: string;
 }
