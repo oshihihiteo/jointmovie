@@ -1,8 +1,9 @@
-import { ConflictException, Injectable } from "@nestjs/common";
+import { ConflictException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import * as argon2 from "argon2";
 import { Repository } from "typeorm";
-import { CreateUserDto } from "./create-user.dto";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { LoginUserDto } from "./dto/login-user.dto";
 import { User } from "./user.entity";
 
 @Injectable()
@@ -24,5 +25,21 @@ export class UserService{
 
   const user = this.userRepository.create({username, password: passwordHash, displayname: username})
   return this.userRepository.save(user);
+ }
+
+ async login(loginUserDto: LoginUserDto){
+  const {username, password} = loginUserDto
+  const user = await this.userRepository.findOne({
+    where: {username},
+    select: {
+      password: true
+    }
+  }
+  )
+
+  if (!user || !await argon2.verify(user.password, password)){
+   throw new UnauthorizedException('Invalid credentials');
+  }
+
  }
 }
