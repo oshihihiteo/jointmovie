@@ -1,0 +1,11 @@
+@font-face {
+  font-family: 'TildaSans-Regular';
+  src: url('@/assets/fonts/TildaSans-Regular.ttf') format('truetype');
+}
+
+
+body {
+  margin: 0;
+  font-family: 'TildaSans-Regular';
+  background-color: $light-page
+}
